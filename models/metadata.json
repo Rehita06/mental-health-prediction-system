@@ -1,0 +1,91 @@
+{
+  "best_model": "rf",
+  "target": "treatment",
+  "positive_label": 1,
+  "raw_feature_names": [
+    "Timestamp",
+    "Age",
+    "Gender",
+    "Country",
+    "state",
+    "self_employed",
+    "family_history",
+    "work_interfere",
+    "no_employees",
+    "remote_work",
+    "tech_company",
+    "benefits",
+    "care_options",
+    "wellness_program",
+    "seek_help",
+    "anonymity",
+    "leave",
+    "mental_health_consequence",
+    "phys_health_consequence",
+    "coworkers",
+    "supervisor",
+    "mental_health_interview",
+    "phys_health_interview",
+    "mental_vs_physical",
+    "obs_consequence",
+    "comments"
+  ],
+  "numeric_features": [
+    "Age"
+  ],
+  "categorical_features": [
+    "Timestamp",
+    "Gender",
+    "Country",
+    "state",
+    "self_employed",
+    "family_history",
+    "work_interfere",
+    "no_employees",
+    "remote_work",
+    "tech_company",
+    "benefits",
+    "care_options",
+    "wellness_program",
+    "seek_help",
+    "anonymity",
+    "leave",
+    "mental_health_consequence",
+    "phys_health_consequence",
+    "coworkers",
+    "supervisor",
+    "mental_health_interview",
+    "phys_health_interview",
+    "mental_vs_physical",
+    "obs_consequence",
+    "comments"
+  ],
+  "test_metrics": {
+    "accuracy": 0.746031746031746,
+    "precision": 0.7666666666666667,
+    "recall": 0.71875,
+    "f1": 0.7419354838709677,
+    "auc": 0.8112084173387095,
+    "cm": [
+      [
+        96,
+        28
+      ],
+      [
+        36,
+        92
+      ]
+    ]
+  },
+  "cv_results": {
+    "logreg": {
+      "cv_f1": 0.7250443671286311
+    },
+    "rf": {
+      "cv_f1": 0.7503058833266053
+    },
+    "xgb": {
+      "cv_f1": 0.739900246891435
+    }
+  }
+}

@@ -1,0 +1,335 @@
+<!-- inference/templates/form.html -->
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mental Health Survey</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background: #f8f9fa;
+    }
+    .survey-card {
+      border-radius: 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      margin-bottom: 1.5rem;
+    }
+    .card-header {
+      font-weight: 600;
+      font-size: 1.1rem;
+      background: linear-gradient(90deg, #4facfe, #00f2fe);
+      color: white;
+      border-radius: 1rem 1rem 0 0 !important;
+    }
+    .form-label {
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body class="container py-4">
+
+  <h2 class="mb-4 text-center">🧠 Mental Health Survey</h2>
+  <p class="text-muted text-center mb-4">
+    Please answer the following questions honestly.  
+    Your responses will help predict your mental health risk.
+  </p>
+
+  <div class="text-end mb-3">
+    <a href="{% url 'user_results' %}" class="btn btn-outline-primary btn-sm me-2">View My Results</a>
+    <a href="{% url 'admin_dashboard' %}" class="btn btn-outline-success btn-sm me-2">Admin Dashboard</a>
+    <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm">Logout</a>
+  </div>
+
+  <form id="survey" class="row g-3">
+
+    <!-- Section 1: Personal Info -->
+    <div class="card survey-card">
+      <div class="card-header">👤 Personal Information</div>
+      <div class="card-body row g-3">
+        <div class="col-md-4">
+          <label class="form-label">What is your age?</label>
+          <input type="number" class="form-control" name="age" id="ageField" value="{{ request.user.profile.age|default:'' }}">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">What is your gender?</label>
+          <select class="form-select" name="Gender" id="genderField" required>
+          <option value="">Choose...</option>
+          <option value="Male" {% if request.user.profile.gender == "Male" %}selected{% endif %}>Male</option>
+          <option value="Female" {% if request.user.profile.gender == "Female" %}selected{% endif %}>Female</option>
+          <option value="Other" {% if request.user.profile.gender == "Other" %}selected{% endif %}>Other</option>
+        </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">What is your designation?</label>
+          <input type="text" class="form-control" name="designation" id="designationField">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Which country do you live in?</label>
+          <input type="text" class="form-control" name="Country" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Which state/region do you live in?</label>
+          <input type="text" class="form-control" name="state">
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Work Info -->
+    <div class="card survey-card">
+      <div class="card-header">💼 Work Information</div>
+      <div class="card-body row g-3">
+        <!-- <div class="col-md-6">
+          <label class="form-label">Are you currently self-employed?</label>
+          <select class="form-select" name="self_employed">
+            <option value="">Choose...</option>
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+        </div> -->
+        <div class="col-md-6">
+          <label class="form-label">Which type of company do you work in?</label>
+          <select class="form-select" id="companyType" required>
+            <option value="">Choose...</option>
+            <option data-map="Yes">Solutions</option>
+            <option data-map="Yes">Consultancy</option>
+            <option data-map="No">Startup (Non-tech)</option>
+            <option data-map="No">Other</option>
+          </select>
+          <input type="hidden" name="tech_company" id="techCompanyHidden">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">How many employees does your team have?</label>
+          <input type="number" class="form-control" name="no_employees" min="1">
+          <!-- <select class="form-select" name="no_employees">
+            <option value="">Choose...</option>
+            <option>1–5</option>
+            <option>6–25</option>
+            <option>26–100</option>
+            <option>101–500</option>
+            <option>500–1000</option>
+            <option>1000+</option>
+          </select> -->
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Do you work remotely at least 50% of the time?</label>
+          <select class="form-select" name="remote_work">
+            <option value="">Choose...</option>
+            <option>Yes</option>
+            <option>No</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Mental Health -->
+    <div class="card survey-card">
+      <div class="card-header">🧩 Mental Health Factors</div>
+      <div class="card-body row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Do you have a family history of mental illness?</label><br>
+          <div class="btn-group" role="group">
+            <input type="radio" class="btn-check" name="family_history" id="fhYes" value="Yes">
+            <label class="btn btn-outline-success" for="fhYes">Yes</label>
+            <input type="radio" class="btn-check" name="family_history" id="fhNo" value="No">
+            <label class="btn btn-outline-danger" for="fhNo">No</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">How often does your mental health affect your work?</label>
+          <select class="form-select" name="work_interfere" required>
+            <option value="">Choose...</option>
+            <option>Never</option>
+            <option>Rarely</option>
+            <option>Sometimes</option>
+            <option>Often</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Which mental health benefits does your employer provide?</label><br>
+          <div class="form-check"><input class="form-check-input" type="checkbox" name="benefits" value="Counseling"> Counseling</div>
+          <div class="form-check"><input class="form-check-input" type="checkbox" name="benefits" value="Paid leave"> Paid Leave</div>
+          <div class="form-check"><input class="form-check-input" type="checkbox" name="benefits" value="Workshops"> Workshops</div>
+          <div class="form-check"><input class="form-check-input" type="checkbox" name="benefits" value="None"> None</div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">If needed, can you take medical leave for mental health?</label>
+          <select class="form-select" name="leave">
+            <option value="">Choose...</option>
+            <option>Yes</option>
+            <option>No</option>
+            <option>Don't know</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Lifestyle -->
+    <div class="card survey-card">
+      <div class="card-header">🌙 Lifestyle</div>
+      <div class="card-body row g-3">
+        <div class="col-md-6">
+          <label class="form-label">On average, how many hours of sleep do you get per night?</label>
+          <input type="number" class="form-control" name="sleep_hours" min="0" max="24">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">How would you rate your work-life balance?</label>
+          <input type="range" class="form-range" min="1" max="5" step="1" name="work_life_balance" id="workLifeBalance">
+          <div class="d-flex justify-content-between"><small>Poor</small><small>Excellent</small></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 5: Extra Comments -->
+    <div class="card survey-card">
+      <div class="card-header">📝 Additional Comments</div>
+      <div class="card-body">
+        <label class="form-label">Would you like to add any additional comments?</label>
+        <textarea class="form-control" name="comments" rows="3" placeholder="Add any extra notes..."></textarea>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary btn-lg px-5">Submit & Get Prediction</button>
+    </div>
+  </form>
+
+  <!-- Results Modal -->
+ <div class="modal fade" id="resultModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Prediction Result</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="resultContent">
+          Loading...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+document.getElementById('survey').addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const fd = new FormData(document.getElementById('survey'));
+    const payload = {};
+    for (const [k, v] of fd.entries()) payload[k] = v || null;
+
+    try {
+        // Step 1: Create assessment
+        const createRes = await fetch('/assessment/create/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!createRes.ok) throw new Error("Assessment creation failed");
+        const assessment = await createRes.json();
+        const assessmentId = assessment.id;
+
+        // Step 2: Run prediction
+        const predictRes = await fetch(`/predict/${assessmentId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            }
+        });
+
+        if (!predictRes.ok) throw new Error("Prediction failed");
+        const data = await predictRes.json();
+
+        // Map numeric results to risk labels
+        function getRiskLabel(value) {
+            switch (value.toString()) {
+                case "0": return "Low";
+                case "1": return "Medium";
+                case "2": return "High";
+                default: return "Unknown";
+            }
+        }
+
+        const riskLevel = getRiskLabel(data.result);
+
+        // Determine colors, emojis, and headers
+        let colorClass = "secondary";
+        let emoji = "ℹ️";
+        let headerText = "Unknown Risk";
+
+        switch (riskLevel.toLowerCase()) {
+            case "high":
+                colorClass = "danger"; emoji = "⚠️"; headerText = "High Risk"; break;
+            case "medium":
+                colorClass = "warning"; emoji = "⚠️"; headerText = "Medium Risk"; break;
+            case "low":
+                colorClass = "success"; emoji = "✅"; headerText = "Low Risk"; break;
+        }
+
+        // Show result in modal with colored card
+        const resultContent = `
+            <div class="card mb-3 shadow" style="border-radius:1rem; border-left: 0.5rem solid;">
+                <div class="card-header text-white bg-${colorClass} d-flex align-items-center">
+                    <span class="fs-4 me-2">${emoji}</span>
+                    <span>${headerText}</span>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Prediction: <span class="badge bg-${colorClass} text-dark">${riskLevel}</span></h5>
+                    <p class="card-text"><strong>Confidence:</strong> ${(data.confidence_score*100).toFixed(2)}%</p>
+                    <p class="card-text"><strong>Description:</strong> ${data.description}</p>
+                    <p class="card-text"><strong>Recommendation:</strong> ${data.recommendation}</p>
+                    <hr>
+                    <p class="card-text"><small>Model Used: ${data.model_used}</small></p>
+                </div>
+            </div>
+        `;
+
+        document.getElementById('resultContent').innerHTML = resultContent;
+        new bootstrap.Modal(document.getElementById('resultModal')).show();
+
+    } catch (err) {
+        alert(err.message);
+    }
+});
+
+// Helper to fetch CSRF cookie
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const designationField = document.getElementById("designationField");
+  designationField.value = "{{ request.user.profile.designation|default:'' }}";
+
+
+
+ 
+  const companyType = document.getElementById("companyType");
+  const techCompanyHidden = document.getElementById("techCompanyHidden");
+
+  companyType.addEventListener("change", () => {
+    const selected = companyType.options[companyType.selectedIndex];
+    techCompanyHidden.value = selected.getAttribute("data-map"); // Yes or No
+  });
+
+</script>
+
+
+</body>
+</html>

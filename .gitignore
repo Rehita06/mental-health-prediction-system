@@ -1,0 +1,19 @@
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+
+# Virtual Environment
+env/
+venv/
+ENV/
+.env
+.venv
+
+# Migrations
+*/migrations/*
+# Python cache
+__pycache__/
+*.py[cod]
